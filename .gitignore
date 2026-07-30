@@ -109,3 +109,5 @@ airflow/
 
 # Data directory
 data/
+
+assets/
