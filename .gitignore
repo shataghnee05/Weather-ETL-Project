@@ -103,3 +103,9 @@ htmlcov/
 *.bak
 *.tmp
 *.temp
+
+# Airflow directory
+airflow/
+
+# Data directory
+data/
