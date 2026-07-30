@@ -6,9 +6,7 @@ An end-to-end ETL pipeline that extracts real-time weather data from the Open-Me
 
 ## Architecture
 
-<p align="center">
-  <img src="assets/ETL_Pipeline.png" alt="Weather ETL Pipeline" width="1000">
-</p>
+![Weather ETL Pipeline](assets/ETL_Pipeline.png)
 
 ---
 
