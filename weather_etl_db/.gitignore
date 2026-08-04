@@ -9,9 +9,7 @@ logs/
 # Ignore example models
 models/example/*
 
-# Keep the default example models
-!models/example/my_first_dbt_model.sql
-!models/example/my_second_dbt_model.sql
+
 
 # Keep every .gitkeep file anywhere in the project
 !**/.gitkeep
