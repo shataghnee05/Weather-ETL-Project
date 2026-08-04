@@ -1,2 +1,2 @@
 SELECT * FROM weather_data
-WHERE city = 'Delhi'
+WHERE city = 'Chandannagar'
