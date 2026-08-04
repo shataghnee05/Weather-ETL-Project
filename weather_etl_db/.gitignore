@@ -1,5 +1,8 @@
-
 target/
 dbt_packages/
 logs/
 .env
+models/my_first_dbt_model.sql
+models/my_second_dbt_model.sql
+
+
