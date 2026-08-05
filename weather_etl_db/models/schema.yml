@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: cleaned_weather
+    description: "Cleaned weather data"
+
+    columns:
+      - name: city
+        tests:
+          - not_null
+      - name: Temperature
+        tests:
+          - not_null
+      - name: Windspeed
+        tests:
+          - not_null
+      - name: Humidity
+        tests:
+          - not_null
+      - name: Visibility
+        tests:
+          - not_null

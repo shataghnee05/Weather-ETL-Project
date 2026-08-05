@@ -10,6 +10,5 @@ logs/
 models/example/*
 
 
-
 # Keep every .gitkeep file anywhere in the project
 !**/.gitkeep
