@@ -1,30 +1,30 @@
 version: '3.8'
 
-x-airflow-common: &airflow-common
-  image: apache/airflow:3.1.1
-  environment:
-    - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-    - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER:-shaty}:${POSTGRES_PASSWORD:-shaty05}@postgres:5432/${POSTGRES_DB:-weather_etl_db}
-    - AIRFLOW__CORE__LOAD_EXAMPLES=false
-    - AIRFLOW__CORE__STORE_DAG_CODE=true
-    - AIRFLOW__CORE__STORE_SERIALIZED_DAGS=true
-    - AIRFLOW_UID=${AIRFLOW_UID:-1000}
-    - _PIP_ADDITIONAL_REQUIREMENTS=pandas aiohttp python-dotenv sqlalchemy psycopg2-binary
-    - API_URL=${API_URL:-https://api.open-meteo.com/v1/forecast}
-    - MAX_CON_FETCH=${MAX_CON_FETCH:-4}
-    - DB_HOST=postgres
-    - DB_PORT=5432
-    - POSTGRES_USER=${POSTGRES_USER:-shaty}
-    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-shaty05}
-    - POSTGRES_DB=${POSTGRES_DB:-weather_etl_db}
-  volumes:
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./src:/opt/airflow/src
-    - ./data:/opt/airflow/data
-  depends_on:
-    postgres:
-      condition: service_healthy
+# x-airflow-common: &airflow-common
+#   image: apache/airflow:3.1.1
+#   environment:
+#     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+#     - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://${POSTGRES_USER:-shaty}:${POSTGRES_PASSWORD:-shaty05}@postgres:5432/${POSTGRES_DB:-weather_etl_db}
+#     - AIRFLOW__CORE__LOAD_EXAMPLES=false
+#     - AIRFLOW__CORE__STORE_DAG_CODE=true
+#     - AIRFLOW__CORE__STORE_SERIALIZED_DAGS=true
+#     - AIRFLOW_UID=${AIRFLOW_UID:-1000}
+#     - _PIP_ADDITIONAL_REQUIREMENTS=pandas aiohttp python-dotenv sqlalchemy psycopg2-binary
+#     - API_URL=${API_URL:-https://api.open-meteo.com/v1/forecast}
+#     - MAX_CON_FETCH=${MAX_CON_FETCH:-4}
+#     - DB_HOST=postgres
+#     - DB_PORT=5432
+#     - POSTGRES_USER=${POSTGRES_USER:-shaty}
+#     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-shaty05}
+#     - POSTGRES_DB=${POSTGRES_DB:-weather_etl_db}
+#   volumes:
+#     - ./dags:/opt/airflow/dags
+#     - ./logs:/opt/airflow/logs
+#     - ./src:/opt/airflow/src
+#     - ./data:/opt/airflow/data
+#   depends_on:
+#     postgres:
+#       condition: service_healthy
 
 services:
   postgres:
@@ -70,47 +70,47 @@ services:
         condition: service_healthy
     restart: always
 
-  airflow-init:
-    <<: *airflow-common
-    container_name: airflow-init
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - |
-        mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/data
-        airflow db migrate
-        airflow users create \
-          --username admin \
-          --password admin \
-          --firstname Airflow \
-          --lastname Admin \
-          --role Admin \
-          --email admin@example.com || true
+#   airflow-init:
+#     <<: *airflow-common
+#     container_name: airflow-init
+#     entrypoint: /bin/bash
+#     command:
+#       - -c
+#       - |
+#         mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/data
+#         airflow db migrate
+#         airflow users create \
+#           --username admin \
+#           --password admin \
+#           --firstname Airflow \
+#           --lastname Admin \
+#           --role Admin \
+#           --email admin@example.com || true
 
-  airflow-webserver:
-    <<: *airflow-common
-    container_name: airflow-webserver
-    command: webserver
-    ports:
-      - "8080:8080"
-    healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-    depends_on:
-      airflow-init:
-        condition: service_completed_successfully
-    restart: always
+#   airflow-webserver:
+#     <<: *airflow-common
+#     container_name: airflow-webserver
+#     command: webserver
+#     ports:
+#       - "8080:8080"
+#     healthcheck:
+#       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+#       interval: 10s
+#       timeout: 10s
+#       retries: 5
+#     depends_on:
+#       airflow-init:
+#         condition: service_completed_successfully
+#     restart: always
 
-  airflow-scheduler:
-    <<: *airflow-common
-    container_name: airflow-scheduler
-    command: scheduler
-    depends_on:
-      airflow-init:
-        condition: service_completed_successfully
-    restart: always
+#   airflow-scheduler:
+#     <<: *airflow-common
+#     container_name: airflow-scheduler
+#     command: scheduler
+#     depends_on:
+#       airflow-init:
+#         condition: service_completed_successfully
+#     restart: always
 
 volumes:
   postgres_data:
