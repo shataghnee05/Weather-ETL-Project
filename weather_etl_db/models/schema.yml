@@ -2,21 +2,102 @@ version: 2
 
 models:
   - name: cleaned_weather
-    description: "Cleaned weather data"
-
+    description: "Standardized staging view for raw weather observations from PostgreSQL weather_data"
     columns:
       - name: city
+        description: "City name"
         tests:
           - not_null
-      - name: Temperature
+      - name: observation_date
+        description: "Observation date (YYYY-MM-DD)"
         tests:
           - not_null
-      - name: Windspeed
+      - name: recorded_at
+        description: "Full timestamp of the weather observation"
+
+  - name: weather_kpi_overview
+    description: "High-level weather KPIs and aggregate climate indicators across all cities"
+    columns:
+      - name: total_weather_records
+        description: "Total number of valid weather observations"
         tests:
           - not_null
-      - name: Humidity
+      - name: avg_temperature
+        description: "National average temperature in Celsius"
+      - name: avg_humidity
+        description: "National average relative humidity percentage"
+
+  - name: city_weather_summary
+    description: "Per-city aggregated weather statistics, latest readings, extreme rankings, and benchmark comparisons"
+    columns:
+      - name: city
+        description: "City identifier"
         tests:
           - not_null
-      - name: Visibility
+          - unique
+      - name: latest_weather_condition
+        description: "Most recent weather condition description"
+      - name: avg_temperature
+        description: "Historical average temperature for the city"
+      - name: hottest_city_rank
+        description: "Rank among monitored cities by maximum temperature (1 = hottest)"
+
+  - name: daily_weather_trends
+    description: "Daily aggregated weather metrics and day-over-day climate trends"
+    columns:
+      - name: observation_date
+        description: "Date of observation"
         tests:
           - not_null
+          - unique
+      - name: avg_temperature
+        description: "Daily average temperature"
+      - name: temp_change_dod
+        description: "Day-over-day temperature difference in Celsius"
+
+  - name: hourly_weather_trends
+    description: "Hourly diurnal temperature, humidity, and wind trends"
+    columns:
+      - name: observation_date
+        description: "Date of observation"
+        tests:
+          - not_null
+      - name: hour_of_day
+        description: "Hour of the day (0-23)"
+        tests:
+          - not_null
+
+  - name: weather_condition_distribution
+    description: "Frequency, percentage distribution, and ranking of weather conditions"
+    columns:
+      - name: weather_condition
+        description: "Weather description category"
+        tests:
+          - not_null
+          - unique
+      - name: occurrence_count
+        description: "Total times this condition occurred"
+      - name: percentage_of_total
+        description: "Percentage share of total observations"
+
+  - name: city_condition_matrix
+    description: "Breakdown of weather conditions observed per city"
+    columns:
+      - name: city
+        description: "City name"
+        tests:
+          - not_null
+      - name: weather_condition
+        description: "Weather condition"
+        tests:
+          - not_null
+
+  - name: data_quality_monitoring
+    description: "Pipeline health check, null counts, duplicate records, and data freshness metrics"
+    columns:
+      - name: total_records
+        description: "Total records analyzed"
+        tests:
+          - not_null
+      - name: data_completeness_percentage
+        description: "Percentage of non-null metric observations"

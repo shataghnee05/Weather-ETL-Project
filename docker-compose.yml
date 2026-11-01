@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shaty05}
       POSTGRES_DB: ${POSTGRES_DB:-weather_etl_db}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -43,6 +43,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: always
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    network_mode: "host"
+    environment:
+      MB_DB_FILE: /metabase-data/metabase.db
+    volumes:
+      - metabase_data:/metabase-data
     restart: always
 
   pgadmin:
@@ -105,3 +115,4 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  metabase_data:
